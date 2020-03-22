@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 // 環境変数GOOGLE_APPLICATION_CREDENTIALSにサービスアカウントのjsonのパスを設定すること。
 admin.initializeApp({
     credential: admin.credential.applicationDefault(),
-    databaseURL: "https://<project-ID>.firebaseio.com"
+    databaseURL: "https://<project-id>.firebaseio.com"
 });
 
 const express = require('express');
@@ -105,7 +105,10 @@ app.post('/channels/:cname/messages', (req, res) => {
 });
 
 app.get('/channels/:cname/messages', (req, res) => {
-    let cname = req.param.cname;
+    let cname = req.params.cname;
+    for(a in req.params) {
+        console.log(a);
+    }
     let messagesRef = admin.database().ref(`channels/${cname}/messages`).orderByChild('date').limitToLast(20);
     messagesRef.once('value', function(snapshot) {
         let items = new Array();
